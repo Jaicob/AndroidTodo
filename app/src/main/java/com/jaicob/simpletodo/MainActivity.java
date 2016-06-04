@@ -1,5 +1,6 @@
 package com.jaicob.simpletodo;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -25,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> items;
     private ArrayAdapter<String> itemsAdapter;
     private ListView lvItems;
+    private final int REQUEST_CODE = 20;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
         lvItems.setAdapter(itemsAdapter);
         setupViewListener();
+        setupClickListener();
     }
 
     @Override
@@ -84,6 +87,39 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 }
             });
+    }
+
+    // Click listener used for editing items in the lvItems list
+    private void setupClickListener() {
+        lvItems.setOnItemClickListener(
+            new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String itemText = items.get(position).toString();
+                    launchEditView(itemText, position);
+                }
+            }
+        );
+    }
+
+    // Intent to launch the edit view for item when clicked
+    public void launchEditView(String itemText, int position) {
+        Intent i = new Intent(MainActivity.this, EditItemActivity.class);
+        i.putExtra("itemText",itemText);
+        i.putExtra("position",position);
+        startActivityForResult(i,REQUEST_CODE);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
+            String updateItemText = data.getExtras().getString("updatedItemText");
+            int position = data.getExtras().getInt("position",0);
+            items.set(position,updateItemText);
+            itemsAdapter.notifyDataSetChanged();
+            writeItems();
+        }
     }
 
     // Read saved items from a file

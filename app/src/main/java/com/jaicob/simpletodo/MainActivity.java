@@ -75,19 +75,9 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
     // Fired when pressing btnAddItem. Adds item to todo list
     public void onAddItem(View view) {
         FragmentManager manager = getSupportFragmentManager();
-        ItemDialogFragment itemDialog = ItemDialogFragment.newInstance("A Task");
+        ItemDialogFragment itemDialog = ItemDialogFragment.newInstance("Enter Task Description",-1);
         itemDialog.show(manager, "fragment_item");
-
-//        EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
-//        String newText = etNewItem.getText().toString();
-//        itemsAdapter.add(newText);
-//        etNewItem.setText("");
-//        writeItems();
     }
-
-//    public void onButtonPressed(View view) {
-//        System.out.println("From Activity: Button clicked");
-//    }
 
     // Event listener to remove items from list on long clicks
     private void setupViewListener() {
@@ -118,11 +108,9 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
 
     // Intent to launch the edit view for item when clicked
     public void launchEditView(String itemText, int position) {
-        Intent i = new Intent(MainActivity.this, EditItemActivity.class);
-        i.putExtra("itemText",itemText);
-        i.putExtra("position",position);
-        startActivityForResult(i,REQUEST_CODE);
-
+        FragmentManager manager = getSupportFragmentManager();
+        ItemDialogFragment itemDialog = ItemDialogFragment.newInstance(itemText,position);
+        itemDialog.show(manager, "fragment_item");
     }
 
     @Override
@@ -153,15 +141,20 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
         File todoFile = new File(filesDir, "todo.txt");
         try {
             FileUtils.writeLines(todoFile,items);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void onFragmentInteraction(Uri uri) {
-        System.out.println("From Fragment: Button clicked");
-//        Toast.makeText(this, "Added new item", Toast.LENGTH_SHORT);
+    public void onFragmentInteraction(String description, int position) {
+        System.out.println("Passed data to be saved\nDescription: " + description);
+        if (position == -1) {
+            itemsAdapter.add(description);
+        } else {
+            items.set(position,description);
+            itemsAdapter.notifyDataSetChanged();
+        }
+        writeItems();
     }
 }

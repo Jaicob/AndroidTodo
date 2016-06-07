@@ -1,9 +1,12 @@
 package com.jaicob.simpletodo;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOExceptionWithCause;
@@ -21,7 +25,9 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+import layout.ItemDialogFragment;
+
+public class MainActivity extends AppCompatActivity implements ItemDialogFragment.OnFragmentInteractionListener {
 
     private ArrayList<String> items;
     private ArrayAdapter<String> itemsAdapter;
@@ -68,12 +74,20 @@ public class MainActivity extends AppCompatActivity {
 
     // Fired when pressing btnAddItem. Adds item to todo list
     public void onAddItem(View view) {
-        EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
-        String newText = etNewItem.getText().toString();
-        itemsAdapter.add(newText);
-        etNewItem.setText("");
-        writeItems();
+        FragmentManager manager = getSupportFragmentManager();
+        ItemDialogFragment itemDialog = ItemDialogFragment.newInstance("A Task");
+        itemDialog.show(manager, "fragment_item");
+
+//        EditText etNewItem = (EditText) findViewById(R.id.etNewItem);
+//        String newText = etNewItem.getText().toString();
+//        itemsAdapter.add(newText);
+//        etNewItem.setText("");
+//        writeItems();
     }
+
+//    public void onButtonPressed(View view) {
+//        System.out.println("From Activity: Button clicked");
+//    }
 
     // Event listener to remove items from list on long clicks
     private void setupViewListener() {
@@ -143,5 +157,11 @@ public class MainActivity extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+        System.out.println("From Fragment: Button clicked");
+//        Toast.makeText(this, "Added new item", Toast.LENGTH_SHORT);
     }
 }

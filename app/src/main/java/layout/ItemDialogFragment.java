@@ -38,6 +38,7 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
 
     private Button btnSave;
     private Button btnCancel;
+    private Button btnDelete;
     private TextView tvTitleLabel;
     private EditText etDescription;
 
@@ -76,13 +77,15 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item, container, false);
-        btnSave = (Button) view.findViewById(R.id.save);
+        btnSave = (Button) view.findViewById(R.id.btnSave);
         btnCancel = (Button) view.findViewById(R.id.btnCancel);
+        btnDelete = (Button) view.findViewById(R.id.btnDelete);
         tvTitleLabel = (TextView) view.findViewById(R.id.tvTitleLabel);
         etDescription = (EditText) view.findViewById(R.id.etDescription);
 
         btnSave.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
+        btnDelete.setOnClickListener(this);
         tvTitleLabel.setText(itemDescription);
         etDescription.setHint(itemDescription);
         // Inflate the layout for this fragment
@@ -91,14 +94,23 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
 
     @Override
     public void onClick(View view) {
-        if (view.getId() == R.id.btnCancel) {
-            this.dismiss();
-        } else {
-            System.out.println("Clicked the save button");
-            OnFragmentInteractionListener listener = (OnFragmentInteractionListener) getActivity();
-            String newDescription = etDescription.getText().toString();
-            listener.onFragmentInteraction(newDescription, position);
-            this.dismiss();
+        OnFragmentInteractionListener listener = (OnFragmentInteractionListener) getActivity();
+        switch (view.getId()){
+            case R.id.btnCancel:
+                this.dismiss();
+                break;
+            case R.id.btnDelete:
+                listener.onFragmentDelete(position);
+                this.dismiss();
+                break;
+            case R.id.btnSave:
+                String newDescription = etDescription.getText().toString();
+                listener.onFragmentUpdate(newDescription, position);
+                this.dismiss();
+                break;
+            default:
+                this.dismiss();
+                break;
         }
     }
 
@@ -146,7 +158,7 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(String description, int position);
+        void onFragmentDelete(int position);
+        void onFragmentUpdate(String description, int position);
     }
 }

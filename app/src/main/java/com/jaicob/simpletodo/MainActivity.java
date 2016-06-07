@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
         readItems();
         itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
         lvItems.setAdapter(itemsAdapter);
-        setupViewListener();
         setupClickListener();
     }
 
@@ -79,20 +78,6 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
         itemDialog.show(manager, "fragment_item");
     }
 
-    // Event listener to remove items from list on long clicks
-    private void setupViewListener() {
-        lvItems.setOnItemLongClickListener(
-            new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> adpater, View item, int pos, long id) {
-                    items.remove(pos);
-                    itemsAdapter.notifyDataSetChanged();
-                     writeItems();
-                    return true;
-                }
-            });
-    }
-
     // Click listener used for editing items in the lvItems list
     private void setupClickListener() {
         lvItems.setOnItemClickListener(
@@ -111,17 +96,6 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
         FragmentManager manager = getSupportFragmentManager();
         ItemDialogFragment itemDialog = ItemDialogFragment.newInstance(itemText,position);
         itemDialog.show(manager, "fragment_item");
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == REQUEST_CODE) {
-            String updateItemText = data.getExtras().getString("updatedItemText");
-            int position = data.getExtras().getInt("position",0);
-            items.set(position,updateItemText);
-            itemsAdapter.notifyDataSetChanged();
-            writeItems();
-        }
     }
 
     // Read saved items from a file
@@ -147,7 +121,7 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
     }
 
     @Override
-    public void onFragmentInteraction(String description, int position) {
+    public void onFragmentUpdate(String description, int position) {
         System.out.println("Passed data to be saved\nDescription: " + description);
         if (position == -1) {
             itemsAdapter.add(description);
@@ -156,5 +130,14 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
             itemsAdapter.notifyDataSetChanged();
         }
         writeItems();
+    }
+
+    @Override
+    public void onFragmentDelete(int position) {
+        if (position != -1) {
+            items.remove(position);
+            itemsAdapter.notifyDataSetChanged();
+            writeItems();
+        }
     }
 }

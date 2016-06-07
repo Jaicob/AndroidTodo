@@ -17,7 +17,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/save_label"
-        android:id="@+id/save"
+        android:id="@+id/btnSave"
         android:layout_gravity="right|bottom" />
 
     <EditText
@@ -32,5 +32,12 @@
         android:text="@android:string/cancel"
         android:id="@+id/btnCancel"
         android:layout_gravity="left|bottom" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_label"
+        android:id="@+id/btnDelete"
+        android:layout_gravity="center_horizontal|bottom" />
 
 </FrameLayout>

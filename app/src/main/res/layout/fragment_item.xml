@@ -1,0 +1,43 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="layout.ItemFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="47dp"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:id="@+id/tvTitleLabel"
+        android:layout_gravity="center_horizontal|top" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/save_label"
+        android:id="@+id/btnSave"
+        android:layout_gravity="right|bottom" />
+
+    <EditText
+        android:layout_width="248dp"
+        android:layout_height="50dp"
+        android:id="@+id/etDescription"
+        android:layout_gravity="center" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@android:string/cancel"
+        android:id="@+id/btnCancel"
+        android:layout_gravity="left|bottom" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_label"
+        android:id="@+id/btnDelete"
+        android:layout_gravity="center_horizontal|bottom" />
+
+</FrameLayout>

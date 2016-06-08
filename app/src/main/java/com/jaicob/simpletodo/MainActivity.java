@@ -35,7 +35,7 @@ import layout.ItemDialogFragment;
 public class MainActivity extends AppCompatActivity implements ItemDialogFragment.OnFragmentInteractionListener {
 
     private ArrayList<Task> items;
-    private ArrayAdapter<Task> itemsAdapter;
+    private TasksAdapter itemsAdapter;
     private ListView lvItems;
     private final int REQUEST_CODE = 20;
 
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
         // My Content
         lvItems = (ListView) findViewById(R.id.lvItems);
         readItems();
-        itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
+        itemsAdapter = new TasksAdapter(this, items);
         List<Task> queryResult = new Select().from(Task.class).execute();
         itemsAdapter.addAll(queryResult);
         lvItems.setAdapter(itemsAdapter);

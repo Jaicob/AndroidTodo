@@ -30,7 +30,7 @@ public class TasksAdapter extends ArrayAdapter<Task>{
         if(convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_task, parent, false);
         }
-        // Lookup view for data population
+        
         TextView tvDescription = (TextView) convertView.findViewById(R.id.tvDescription);
         tvDescription.setText(task.description);
 
@@ -38,6 +38,7 @@ public class TasksAdapter extends ArrayAdapter<Task>{
         SimpleDateFormat format = new SimpleDateFormat("MMM dd yyyy hh:mm");
         String dueDate = format.format(task.dueDate);
         tvDuedate.setText((CharSequence) dueDate);
+
         return convertView;
     }
 }

@@ -1,11 +1,6 @@
 package com.jaicob.simpletodo;
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -13,23 +8,12 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
-
 import com.activeandroid.query.Select;
 import com.jaicob.simpletodo.models.Task;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOExceptionWithCause;
-
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
 import layout.ItemDialogFragment;
 
 public class MainActivity extends AppCompatActivity implements ItemDialogFragment.OnFragmentInteractionListener {
@@ -47,10 +31,8 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
         setSupportActionBar(toolbar);
 
         // Load data from database
-
-        // My Content
         lvItems = (ListView) findViewById(R.id.lvItems);
-        readItems();
+        items = new ArrayList<>();
         itemsAdapter = new TasksAdapter(this, items);
         List<Task> queryResult = new Select().from(Task.class).execute();
         itemsAdapter.addAll(queryResult);
@@ -107,22 +89,6 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
         FragmentManager manager = getSupportFragmentManager();
         ItemDialogFragment itemDialog = ItemDialogFragment.newInstance(taskId,position);
         itemDialog.show(manager, "fragment_item");
-    }
-
-    // Read saved items from a file
-    private void readItems() {
-        items = new ArrayList<>();
-    }
-
-    // Write items to be saved to a file
-    private void writeItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try {
-            FileUtils.writeLines(todoFile,items);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     @Override

@@ -83,7 +83,9 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
     // Fired when pressing btnAddItem. Adds item to todo list
     public void onAddItem(View view) {
         FragmentManager manager = getSupportFragmentManager();
-        ItemDialogFragment itemDialog = ItemDialogFragment.newInstance("Enter Task Description",-1);
+        Task newTask = new Task("Enter a description", new Date(), false);
+        newTask.save();
+        ItemDialogFragment itemDialog = ItemDialogFragment.newInstance(newTask.getId(),-1);
         itemDialog.show(manager, "fragment_item");
     }
 
@@ -93,32 +95,23 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
             new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    String itemText = items.get(position).toString();
-                    launchEditView(itemText, position);
+                    Long taskId = items.get(position).getId();
+                    launchEditView(taskId, position);
                 }
             }
         );
     }
 
     // Intent to launch the edit view for item when clicked
-    public void launchEditView(String itemText, int position) {
+    public void launchEditView(Long taskId, int position) {
         FragmentManager manager = getSupportFragmentManager();
-        ItemDialogFragment itemDialog = ItemDialogFragment.newInstance(itemText,position);
+        ItemDialogFragment itemDialog = ItemDialogFragment.newInstance(taskId,position);
         itemDialog.show(manager, "fragment_item");
     }
 
     // Read saved items from a file
     private void readItems() {
-//        File filesDir = getFilesDir();
-//        File todoFile = new File(filesDir, "todo.txt");
-//        try {
-//            items = new ArrayList<String>(FileUtils.readLines(todoFile));
-//        } catch (IOException e) {
-//            items = new ArrayList<String>();
-//        }
         items = new ArrayList<>();
-//        Task t = new Task("Sample Task 1",new Date(),false);
-//        t.save();
     }
 
     // Write items to be saved to a file
@@ -133,16 +126,12 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
     }
 
     @Override
-    public void onFragmentUpdate(String description, int position) {
-        System.out.println("Passed data to be saved\nDescription: " + description);
+    public void onFragmentUpdate(Long taskId, int position) {
         if (position == -1) {
-//            itemsAdapter.add(description);
-            Task newTask = new Task(description, new Date(),false);
-        } else {
-//            items.set(position,description);
-            itemsAdapter.notifyDataSetChanged();
+            Task newTask =  Task.load(Task.class,taskId);
+            itemsAdapter.add(newTask);
         }
-        writeItems();
+        itemsAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -150,7 +139,6 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
         if (position != -1) {
             items.remove(position);
             itemsAdapter.notifyDataSetChanged();
-            writeItems();
         }
     }
 }

@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.jaicob.simpletodo.R;
+import com.jaicob.simpletodo.models.Task;
 
 import java.util.Date;
 
@@ -28,13 +29,12 @@ import java.util.Date;
  * create an instance of this fragment.
  */
 public class ItemDialogFragment extends DialogFragment implements View.OnClickListener {
-    private static final String ITEM_DESCRIPTION = "description";
+    private static final String TASK_ID = "taskId";
     private static final String POSITION = "position";
-//    private static final String DUE_DATE = "dueDate";
 
-    private String itemDescription;
+    private Long taskId;
+    private Task task;
     private int position;
-//    private Date dueDate;
 
     private Button btnSave;
     private Button btnCancel;
@@ -55,10 +55,10 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
      * @param taskDescription Parameter 1.
      * @return A new instance of fragment ItemFragment.
      */
-    public static ItemDialogFragment newInstance(String taskDescription, int position) {
+    public static ItemDialogFragment newInstance(Long taskId, int position) {
         ItemDialogFragment fragment = new ItemDialogFragment();
         Bundle args = new Bundle();
-        args.putString("description", taskDescription);
+        args.putLong("taskId", taskId);
         args.putInt("position", position);
         fragment.setArguments(args);
         return fragment;
@@ -68,7 +68,7 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            itemDescription = getArguments().getString(ITEM_DESCRIPTION);
+            task = Task.load(Task.class,getArguments().getLong(TASK_ID));
             position = getArguments().getInt(POSITION);
         }
     }
@@ -86,8 +86,8 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
         btnSave.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
-        tvTitleLabel.setText(itemDescription);
-        etDescription.setHint(itemDescription);
+        tvTitleLabel.setText(task.description);
+        etDescription.setHint(task.description);
         // Inflate the layout for this fragment
         return view;
     }
@@ -100,12 +100,14 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
                 this.dismiss();
                 break;
             case R.id.btnDelete:
+                task.delete();
                 listener.onFragmentDelete(position);
                 this.dismiss();
                 break;
             case R.id.btnSave:
-                String newDescription = etDescription.getText().toString();
-                listener.onFragmentUpdate(newDescription, position);
+                task.description = etDescription.getText().toString();
+                task.save();
+                listener.onFragmentUpdate(task.getId(), position);
                 this.dismiss();
                 break;
             default:
@@ -159,6 +161,6 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
      */
     public interface OnFragmentInteractionListener {
         void onFragmentDelete(int position);
-        void onFragmentUpdate(String description, int position);
+        void onFragmentUpdate(Long taskId, int position);
     }
 }

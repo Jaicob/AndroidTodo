@@ -18,19 +18,24 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.activeandroid.query.Select;
+import com.jaicob.simpletodo.models.Task;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOExceptionWithCause;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 import layout.ItemDialogFragment;
 
 public class MainActivity extends AppCompatActivity implements ItemDialogFragment.OnFragmentInteractionListener {
 
-    private ArrayList<String> items;
-    private ArrayAdapter<String> itemsAdapter;
+    private ArrayList<Task> items;
+    private ArrayAdapter<Task> itemsAdapter;
     private ListView lvItems;
     private final int REQUEST_CODE = 20;
 
@@ -41,10 +46,14 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        // Load data from database
+
         // My Content
         lvItems = (ListView) findViewById(R.id.lvItems);
         readItems();
         itemsAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
+        List<Task> queryResult = new Select().from(Task.class).execute();
+        itemsAdapter.addAll(queryResult);
         lvItems.setAdapter(itemsAdapter);
         setupClickListener();
     }
@@ -100,13 +109,16 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
 
     // Read saved items from a file
     private void readItems() {
-        File filesDir = getFilesDir();
-        File todoFile = new File(filesDir, "todo.txt");
-        try {
-            items = new ArrayList<String>(FileUtils.readLines(todoFile));
-        } catch (IOException e) {
-            items = new ArrayList<String>();
-        }
+//        File filesDir = getFilesDir();
+//        File todoFile = new File(filesDir, "todo.txt");
+//        try {
+//            items = new ArrayList<String>(FileUtils.readLines(todoFile));
+//        } catch (IOException e) {
+//            items = new ArrayList<String>();
+//        }
+        items = new ArrayList<>();
+//        Task t = new Task("Sample Task 1",new Date(),false);
+//        t.save();
     }
 
     // Write items to be saved to a file
@@ -124,9 +136,10 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
     public void onFragmentUpdate(String description, int position) {
         System.out.println("Passed data to be saved\nDescription: " + description);
         if (position == -1) {
-            itemsAdapter.add(description);
+//            itemsAdapter.add(description);
+            Task newTask = new Task(description, new Date(),false);
         } else {
-            items.set(position,description);
+//            items.set(position,description);
             itemsAdapter.notifyDataSetChanged();
         }
         writeItems();

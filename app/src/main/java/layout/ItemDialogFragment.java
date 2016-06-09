@@ -12,13 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.jaicob.simpletodo.R;
 import com.jaicob.simpletodo.models.Task;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,8 +43,9 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
     private Button btnSave;
     private Button btnCancel;
     private Button btnDelete;
-    private TextView tvTitleLabel;
     private EditText etDescription;
+    private DatePicker datePicker;
+    private Switch recurrenceSwitch;
 
     private OnFragmentInteractionListener mListener;
 
@@ -80,14 +85,24 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
         btnSave = (Button) view.findViewById(R.id.btnSave);
         btnCancel = (Button) view.findViewById(R.id.btnCancel);
         btnDelete = (Button) view.findViewById(R.id.btnDelete);
-        tvTitleLabel = (TextView) view.findViewById(R.id.tvTitleLabel);
         etDescription = (EditText) view.findViewById(R.id.etDescription);
+        datePicker = (DatePicker) view.findViewById(R.id.datePicker);
+        recurrenceSwitch = (Switch) view.findViewById(R.id.switchRecurring);
 
         btnSave.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
-        tvTitleLabel.setText(task.description);
-        etDescription.setHint(task.description);
+        etDescription.setText(task.description);
+        recurrenceSwitch.setChecked(task.recurring);
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(task.dueDate);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        datePicker.updateDate(year,month,day);
+
+
         // Inflate the layout for this fragment
         return view;
     }
@@ -106,6 +121,13 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
                 break;
             case R.id.btnSave:
                 task.description = etDescription.getText().toString();
+                task.recurring = recurrenceSwitch.isChecked();
+                int day = datePicker.getDayOfMonth();
+                int month = datePicker.getMonth();
+                int year =  datePicker.getYear();
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month, day);
+                task.dueDate = calendar.getTime();
                 task.save();
                 listener.onFragmentUpdate(task.getId(), position);
                 this.dismiss();

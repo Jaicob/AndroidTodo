@@ -6,11 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
-
 import com.jaicob.simpletodo.models.Task;
-
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -35,9 +31,9 @@ public class TasksAdapter extends ArrayAdapter<Task>{
         tvDescription.setText(task.description);
 
         TextView tvDuedate = (TextView) convertView.findViewById(R.id.tvDuedate);
-        SimpleDateFormat format = new SimpleDateFormat("MMM dd yyyy hh:mm");
+        SimpleDateFormat format = new SimpleDateFormat("MMM dd yyyy");
         String dueDate = format.format(task.dueDate);
-        tvDuedate.setText((CharSequence) dueDate);
+        tvDuedate.setText("Due: " + (CharSequence) dueDate);
 
         return convertView;
     }

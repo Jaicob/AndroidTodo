@@ -1,9 +1,7 @@
 package layout;
 
 import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -12,13 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Switch;
 
 import com.jaicob.simpletodo.R;
 import com.jaicob.simpletodo.models.Task;
 
-import java.util.Date;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,15 +32,15 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
     private static final String TASK_ID = "taskId";
     private static final String POSITION = "position";
 
-    private Long taskId;
     private Task task;
     private int position;
 
     private Button btnSave;
     private Button btnCancel;
     private Button btnDelete;
-    private TextView tvTitleLabel;
     private EditText etDescription;
+    private DatePicker datePicker;
+    private Switch recurrenceSwitch;
 
     private OnFragmentInteractionListener mListener;
 
@@ -77,17 +77,29 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_item, container, false);
+        // Fetch components
         btnSave = (Button) view.findViewById(R.id.btnSave);
         btnCancel = (Button) view.findViewById(R.id.btnCancel);
         btnDelete = (Button) view.findViewById(R.id.btnDelete);
-        tvTitleLabel = (TextView) view.findViewById(R.id.tvTitleLabel);
         etDescription = (EditText) view.findViewById(R.id.etDescription);
+        datePicker = (DatePicker) view.findViewById(R.id.datePicker);
+        recurrenceSwitch = (Switch) view.findViewById(R.id.switchRecurring);
 
+        // Add initial data/listiners to components
         btnSave.setOnClickListener(this);
         btnCancel.setOnClickListener(this);
         btnDelete.setOnClickListener(this);
-        tvTitleLabel.setText(task.description);
-        etDescription.setHint(task.description);
+        etDescription.setText(task.description);
+        recurrenceSwitch.setChecked(task.recurring);
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTime(task.dueDate);
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+        datePicker.updateDate(year,month,day);
+
+
         // Inflate the layout for this fragment
         return view;
     }
@@ -106,6 +118,13 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
                 break;
             case R.id.btnSave:
                 task.description = etDescription.getText().toString();
+                task.recurring = recurrenceSwitch.isChecked();
+                int day = datePicker.getDayOfMonth();
+                int month = datePicker.getMonth();
+                int year =  datePicker.getYear();
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(year, month, day);
+                task.dueDate = calendar.getTime();
                 task.save();
                 listener.onFragmentUpdate(task.getId(), position);
                 this.dismiss();
@@ -142,7 +161,7 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
     public void onResume() {
         // Get existing layout params for the window
         ViewGroup.LayoutParams params = getDialog().getWindow().getAttributes();
-        //Assign window properties to fill the parent
+        // Assign window properties to fill the parent
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
         params.height = WindowManager.LayoutParams.MATCH_PARENT;
         getDialog().getWindow().setAttributes((android.view.WindowManager.LayoutParams) params);

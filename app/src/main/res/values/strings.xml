@@ -11,4 +11,5 @@
     <string name="date_picker_label">Date</string>
     <string name="recurring_label">Recurring</string>
     <string name="plus_sign">+</string>
+    <string name="recur_weekly_label">Recur Weekly</string>
 </resources>

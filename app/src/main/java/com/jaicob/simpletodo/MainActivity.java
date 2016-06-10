@@ -1,14 +1,21 @@
 package com.jaicob.simpletodo;
 
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
+
 import com.activeandroid.query.Select;
 import com.jaicob.simpletodo.models.Task;
 import java.util.ArrayList;
@@ -38,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
         itemsAdapter.addAll(queryResult);
         lvItems.setAdapter(itemsAdapter);
         setupClickListener();
+        setupLongClickListener();
     }
 
     @Override
@@ -82,6 +90,39 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
                 }
             }
         );
+    }
+
+    protected void removeListItem(final View rowView, final int positon) {
+        final Animation animation = AnimationUtils.loadAnimation(
+                MainActivity.this, android.R.anim.fade_out);
+
+        animation.setFillAfter(true);
+        rowView.startAnimation(animation);
+        Handler handle = new Handler();
+        handle.postDelayed(new Runnable() {
+
+            public void run() {
+                items.get(positon).delete();
+                items.remove(positon);
+                itemsAdapter.notifyDataSetChanged();
+            }
+        },2100);
+    }
+
+    private void setupLongClickListener() {
+        lvItems.setOnItemLongClickListener(
+            new AdapterView.OnItemLongClickListener() {
+                @Override
+                 public boolean onItemLongClick(AdapterView<?> adpater, View item, int pos, long id) {
+                    item.setBackgroundColor(Color.parseColor("#CDDC39"));
+                    TextView description = (TextView) item.findViewById(R.id.tvDescription);
+                    description.setText("DONE!");
+                    TextView dueDate = (TextView) item.findViewById(R.id.tvDuedate);
+                    dueDate.setText("");
+                    removeListItem(item,pos);
+                    return true;
+                }
+            });
     }
 
     // Intent to launch the edit view for item when clicked

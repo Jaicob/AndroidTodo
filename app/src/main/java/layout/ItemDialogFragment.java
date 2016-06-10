@@ -99,7 +99,6 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         datePicker.updateDate(year,month,day);
 
-
         // Inflate the layout for this fragment
         return view;
     }

@@ -20,6 +20,9 @@ public class Task extends Model {
     @Column(name = "Duedate")
     public Date dueDate;
 
+    @Column(name = "Datecreated")
+    public Date dateCreated;
+
     @Column(name = "Recurring")
     public Boolean recurring;
 
@@ -32,6 +35,7 @@ public class Task extends Model {
         this.description = description;
         this.dueDate = dueDate;
         this.recurring = recurring;
+        this.dateCreated = new Date();
     }
 
     public static List<Task> all(){

@@ -7,14 +7,16 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:padding="15dp">
 
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/taskDescriptionRow"
-            android:layout_gravity="center_horizontal|top">
+            android:layout_gravity="center_horizontal|top"
+            android:layout_marginBottom="20dp">
 
             <TextView
                 android:layout_width="90dp"
@@ -36,7 +38,8 @@
             android:layout_below="@id/taskDescriptionRow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/dateRow">
+            android:id="@+id/dateRow"
+            android:layout_marginBottom="20dp">
 
             <TextView
                 android:layout_width="90dp"
@@ -60,7 +63,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/recurringRow"
-            android:weightSum="1">
+            android:weightSum="1"
+            android:layout_marginBottom="20dp">
 
             <TextView
                 android:layout_width="90dp"
@@ -79,7 +83,9 @@
                 android:textStyle="normal"
                 android:textColor="@color/abc_primary_text_material_light"
                 android:enabled="true"
-                android:showText="true" />
+                android:showText="true"
+                android:switchMinWidth="30.0sp"
+                android:switchPadding="5.0sp" />
 
         </LinearLayout>
 
@@ -87,8 +93,8 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/buttonRow">
-
+            android:id="@+id/buttonRow"
+            android:gravity="center_horizontal">
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -101,7 +107,9 @@
                 android:layout_height="wrap_content"
                 android:text="@string/save_label"
                 android:id="@+id/btnSave"
-                android:layout_gravity="bottom|center_horizontal" />
+                android:layout_gravity="bottom|center_horizontal"
+                android:layout_marginRight="17dp"
+                android:layout_marginLeft="17dp"/>
 
             <Button
                 android:layout_width="wrap_content"

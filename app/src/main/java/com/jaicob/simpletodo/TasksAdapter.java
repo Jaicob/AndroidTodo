@@ -22,7 +22,6 @@ public class TasksAdapter extends ArrayAdapter<Task>{
     private final int ONE_DAY_COLOR = Color.parseColor("#29B6F6"); //Amber
     private final int WEEK_COLOR = Color.parseColor("#81D4FA"); //Green
     private final int WEEK_PLUS_COLOR = Color.parseColor("#E1F5FE"); //Green
-    private final int COLOR_DIFFERENCE = SIX_HOURS_COLOR - PAST_DUE_COLOR;
 
     private final int SIX_HOURS = 21600000;
     private final int ONE_DAY = 86400000;
@@ -49,14 +48,7 @@ public class TasksAdapter extends ArrayAdapter<Task>{
         SimpleDateFormat format = new SimpleDateFormat("MMM dd yyyy");
         String dueDate = format.format(task.dueDate);
         tvDuedate.setText("Due: " + (CharSequence) dueDate);
-
-
-
-        Date currentDate = new Date();
-        int millisecondsLeft = (int)(task.dueDate.getTime() - task.dateCreated.getTime());
-        int timeAvailable = (int)(task.dueDate.getTime() - task.dateCreated.getTime());
-        int timeLeft = (int)(task.dueDate.getTime() - (new Date().getTime()));
-
+        double timeLeft = (task.dueDate.getTime() - (new Date().getTime()));
 
         if (timeLeft < 0) {
             convertView.setBackgroundColor(PAST_DUE_COLOR);

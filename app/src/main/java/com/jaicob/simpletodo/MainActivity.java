@@ -19,7 +19,9 @@ import android.widget.TextView;
 import com.activeandroid.query.Select;
 import com.jaicob.simpletodo.models.Task;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import layout.ItemDialogFragment;
 
@@ -102,11 +104,25 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
         handle.postDelayed(new Runnable() {
 
             public void run() {
+                Task t = items.get(positon);
+                Calendar c = new GregorianCalendar();
+                c.setTime(t.dueDate);
+                c.add(Calendar.WEEK_OF_YEAR,1);
+                Task recurringTask = new Task(t.description,c.getTime(),true);
+
                 items.get(positon).delete();
                 items.remove(positon);
                 itemsAdapter.notifyDataSetChanged();
+
+                if (t.recurring) {
+                    recurringTask.save();
+                    itemsAdapter.add(recurringTask);
+                    itemsAdapter.notifyDataSetChanged();
+                }
+                animation.cancel();
+
             }
-        },2100);
+        },1000);
     }
 
     private void setupLongClickListener() {

@@ -10,4 +10,5 @@
     <string name="task_label">Task</string>
     <string name="date_picker_label">Date</string>
     <string name="recurring_label">Recurring</string>
+    <string name="plus_sign">+</string>
 </resources>

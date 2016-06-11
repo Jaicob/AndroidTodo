@@ -25,7 +25,6 @@ public class TasksAdapter extends ArrayAdapter<Task>{
 
     private final int SIX_HOURS = 21600000;
     private final int ONE_DAY = 86400000;
-    private final int THREE_DAYS = 86400000*3;
     private final int WEEK = 86400000*6;
 
     public TasksAdapter(Context context, ArrayList<Task> tasks) {
@@ -43,6 +42,13 @@ public class TasksAdapter extends ArrayAdapter<Task>{
         
         TextView tvDescription = (TextView) convertView.findViewById(R.id.tvDescription);
         tvDescription.setText(task.description);
+
+        TextView tvRecur =  (TextView) convertView.findViewById(R.id.tvRecur);
+        if (task.recurring) {
+            tvRecur.setText("Recurs Weekly");
+        } else {
+            tvRecur.setText("");
+        }
 
         TextView tvDuedate = (TextView) convertView.findViewById(R.id.tvDuedate);
         SimpleDateFormat format = new SimpleDateFormat("MMM dd yyyy");

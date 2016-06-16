@@ -26,16 +26,20 @@ public class Task extends Model {
     @Column(name = "Recurring")
     public Boolean recurring;
 
+    @Column(name = "Priority")
+    public Integer priority;
+
     public Task(){
         super();
     }
 
-    public Task(String description, Date dueDate, Boolean recurring) {
+    public Task(String description, Date dueDate, Boolean recurring, Integer priority) {
         super();
         this.description = description;
         this.dueDate = dueDate;
         this.recurring = recurring;
         this.dateCreated = new Date();
+        this.priority = priority;
     }
 
     public static List<Task> all(){

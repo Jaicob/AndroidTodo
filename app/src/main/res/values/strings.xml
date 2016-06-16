@@ -13,4 +13,5 @@
     <string name="plus_sign">+</string>
     <string name="recur_weekly_label">Recur Weekly</string>
     <string name="recur_label">Recurs Weekly</string>
+    <string name="priority_label">Priority</string>
 </resources>

@@ -9,9 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Switch;
 
 import com.jaicob.simpletodo.R;
@@ -41,6 +43,7 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
     private EditText etDescription;
     private DatePicker datePicker;
     private Switch recurrenceSwitch;
+    private Spinner sPriority;
 
     private OnFragmentInteractionListener mListener;
 
@@ -84,6 +87,7 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
         etDescription = (EditText) view.findViewById(R.id.etDescription);
         datePicker = (DatePicker) view.findViewById(R.id.datePicker);
         recurrenceSwitch = (Switch) view.findViewById(R.id.switchRecurring);
+        sPriority = (Spinner) view.findViewById(R.id.sPriority);
 
         // Add initial data/listiners to components
         btnSave.setOnClickListener(this);
@@ -91,6 +95,11 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
         btnDelete.setOnClickListener(this);
         etDescription.setText(task.description);
         recurrenceSwitch.setChecked(task.recurring);
+
+        String[] priorities = new String[]{"Low", "Med", "High"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity().getBaseContext(), android.R.layout.simple_spinner_item, priorities);
+        sPriority.setAdapter(adapter);
+        sPriority.setSelection(adapter.getPosition(task.priority));
 
         Calendar calendar = new GregorianCalendar();
         calendar.setTime(task.dueDate);
@@ -118,6 +127,7 @@ public class ItemDialogFragment extends DialogFragment implements View.OnClickLi
             case R.id.btnSave:
                 task.description = etDescription.getText().toString();
                 task.recurring = recurrenceSwitch.isChecked();
+                task.priority = sPriority.getSelectedItem().toString();
                 int day = datePicker.getDayOfMonth();
                 int month = datePicker.getMonth();
                 int year =  datePicker.getYear();

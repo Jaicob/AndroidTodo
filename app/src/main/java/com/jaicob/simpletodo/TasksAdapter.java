@@ -42,6 +42,13 @@ public class TasksAdapter extends ArrayAdapter<Task>{
         
         TextView tvDescription = (TextView) convertView.findViewById(R.id.tvDescription);
         tvDescription.setText(task.description);
+        if(task.priority.equals("Low")) {
+            tvDescription.setTextSize(21);
+        } else if (task.priority.equals("Med")) {
+            tvDescription.setTextSize(27);
+        } else if (task.priority.equals("High")) {
+            tvDescription.setTextSize(37);
+        }
 
         TextView tvRecur =  (TextView) convertView.findViewById(R.id.tvRecur);
         if (task.recurring) {
@@ -49,6 +56,8 @@ public class TasksAdapter extends ArrayAdapter<Task>{
         } else {
             tvRecur.setText("");
         }
+
+
 
         TextView tvDuedate = (TextView) convertView.findViewById(R.id.tvDuedate);
         SimpleDateFormat format = new SimpleDateFormat("MMM dd yyyy");

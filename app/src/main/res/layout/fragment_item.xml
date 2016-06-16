@@ -6,8 +6,8 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="612dp"
         android:padding="15dp">
 
         <LinearLayout
@@ -35,7 +35,6 @@
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_below="@id/taskDescriptionRow"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/dateRow"
@@ -50,11 +49,8 @@
 
             <DatePicker
                 android:layout_width="wrap_content"
-                android:layout_height="347dp"
-                android:id="@+id/datePicker"
-                android:layout_alignParentTop="true"
-                android:layout_toEndOf="@+id/textView2"
-                android:layout_column="1" />
+                android:layout_height="364dp"
+                android:id="@+id/datePicker" />
 
         </LinearLayout>
 
@@ -62,12 +58,24 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/recurringRow"
-            android:weightSum="1"
-            android:layout_marginBottom="20dp">
+            android:id="@+id/optionsRow">
 
             <TextView
-                android:layout_width="90dp"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/priority_label"
+                android:id="@+id/textView4" />
+
+            <Spinner
+                android:layout_width="93dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/sPriority"
+                android:layout_weight="0.05"
+                android:layout_marginRight="5dp" />
+
+            <TextView
+                android:layout_width="70dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/recur_weekly_label"
@@ -77,16 +85,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/switchRecurring"
-                android:layout_weight="0.18"
+                android:layout_weight="0.05"
                 android:textOff="off"
                 android:textOn="on"
                 android:textStyle="normal"
                 android:textColor="@color/abc_primary_text_material_light"
                 android:enabled="true"
                 android:showText="true"
-                android:switchMinWidth="30.0sp"
+                android:switchMinWidth="20dp"
                 android:switchPadding="5.0sp" />
-
         </LinearLayout>
 
         <LinearLayout

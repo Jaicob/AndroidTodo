@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
     // Fired when pressing btnAddItem. Adds item to todo list
     public void onAddItem(View view) {
         FragmentManager manager = getSupportFragmentManager();
-        Task newTask = new Task("Enter a description", new Date(), false);
+        Task newTask = new Task("Enter a description", new Date(), false, "Low");
         newTask.save();
         ItemDialogFragment itemDialog = ItemDialogFragment.newInstance(newTask.getId(),-1);
         itemDialog.show(manager, "fragment_item");
@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity implements ItemDialogFragmen
                 Calendar c = new GregorianCalendar();
                 c.setTime(t.dueDate);
                 c.add(Calendar.WEEK_OF_YEAR,1);
-                Task recurringTask = new Task(t.description,c.getTime(),true);
+                Task recurringTask = new Task(t.description,c.getTime(),true, t.priority);
 
                 items.get(positon).delete();
                 items.remove(positon);
